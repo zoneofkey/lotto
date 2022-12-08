@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>통로또</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/default.css" />
+        <link rel="stylesheet" type="text/css" href="css/component.css" />
+        <script src="js/modernizr.custom.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+    <style>
+
+        body{
+            background-color: #acefb2;
+        }
+
+        .hidden{position:absolute; left:-9999%; font-size:0; line-height:0; width:1px; height:1px; overflow:hidden;}
+
+        ul {
+            width: 100%;
+            margin: 0 auto;
+            padding: 0px;
+            list-style: none;
+            text-align: center;
+        }
+
+        ul li {
+            display: inline;
+
+        }
+
+        #box {
+          height: 500px;
+          width: 100%;
+          overflow: auto;
+        }
+
+
+        #content {
+          width: 1000px;
+          background-color: tomato;
+        }
+
+
+
+        #modal.modal-overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        #modal .modal-window {
+            background: rgba( 69, 139, 197, 0.70 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 13.5px );
+            -webkit-backdrop-filter: blur( 13.5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            width: 400px;
+            height: 500px;
+            position: relative;
+            top: -100px;
+            padding: 10px;
+        }
+        #modal .title {
+            padding-left: 10px;
+            display: inline;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+
+        }
+        #modal .title h2 {
+            display: inline;
+        }
+        #modal .close-area {
+            display: inline;
+            float: right;
+            padding-right: 10px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+        }
+
+        #modal .content {
+            margin-top: 20px;
+            padding: 0px 10px;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+        }
+
+    </style>
+
+
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div>
+        <a>테스트</a>
+        <a>테스트</a>
+        <a>테스트</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div style="text-align:center;">
+        <p style="font-size:300%; color:#ea3527;">통찰력</p>
+        <p style="color:#ea3527;">당신의 선택으로 숨어 있는 행운을 찾아보자</p>
+    </div>
+
+    <h1 class="hidden">로또 뽑기</h1>
+
+    <div style="text-align:center;">
+        <h2 style="font-size:800%; color:#ea3527;">뽑기 로또</h2>
+
+    </div>
+
+    <div>
+        <button type="button" id="btn-modal" class="btn btn-primary">모달창</button>
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="title">
+                <h2>모달</h2>
+            </div>
+            <div class="close-area">X</div>
+            <div class="content" id="showT">1. 첫번쨰 공지사항</div>
+            <div class="content">2. 두번째 공지사항</div>
+            <div class="content">3. 세번째 공지사항</div>
+            <div class="content">4. 네번째 공지사항</div>
+        </div>
+    </div>
+
+    <div id="box" onscroll="gotthing()">
+        <div id="content"></div>
+    </div>
+
+    <p id="demo"></p>
+
+    <script>
+        function gotthing() {
+          var box = document.getElementById("box");
+          var x = box.scrollLeft;
+          var y = box.scrollTop;
+          var n = "수평: " + x + "px<br>수직: " + y + "px";
+          document.getElementById ("demo").innerHTML = n;
+        }
+    </script>
+
+    <script>
+        const modal = document.getElementById("modal")
+        function modalOn() {
+            modal.style.display = "flex"
+        }
+        function isModalOn() {
+            return modal.style.display === "flex"
+        }
+        function modalOff() {
+            modal.style.display = "none"
+        }
+
+        const btnModal = document.getElementById("btn-modal")
+        btnModal.addEventListener("click", e => {
+            modalOn();
+
+            var arrR = new Array();
+            arrR = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+            var basicn = 0;
+            var basicn2 = 0;
+
+
+            for(var i2=0; i2<arrR.length; i2++){
+                arrR[i2] = arrNumber[i2]
+            }
+
+            arrR.sort((a,b)=>b-a);
+
+            $("#showT").html("");
+
+            for(var j3=0; j3<6; j3++){
+
+                if(arrR[j3] == 0){
+
+                }else{
+
+                    if(basicn == arrR[j3]){
+
+                    }else{
+                        for(var i3=0; i3<arrNumber.length; i3++){
+
+                            if(basicn2 >5){
+
+                            }else{
+                                if(arrNumber[i3] == arrR[j3]){
+                                    $("#showT").append(i3+1+":"+arrR[j3]+"회,"); basicn2++;
+                                }
+                            }
+
+                        }
+                    }
+                    basicn = arrR[j3];
+
+                }
+
+            }
+
+
+
+
+
+        })
+
+        const closeBtn = modal.querySelector(".close-area")
+        closeBtn.addEventListener("click", e => {
+            modalOff();
+        })
+
+        modal.addEventListener("click", e => {
+            const evTarget = e.target
+            if(evTarget.classList.contains("modal-overlay")) {
+                modalOff();
+            }
+        })
+
+    </script>
+
+
+
+</div>
+
+<script>
+
+
+    {% for lottos in lotto %}
+
+
+        var num6 = {{lottos.name}};
+        var lcount = {{lottos.id}};
+
+        if( lcount < 10){
+            $('#content').append('<button class="btn-styled btnl" type="button" style="width:150px; height:50px; background:#27450d; color:#a49c05;" value="'+num6+'" onclick="popl()">PRESS ME</button>');
+        }else if(10 <= lcount && lcount < 100){
+            $('#content').append('<button class="btn-styled btnl" type="button" style="width:150px; height:50px; background:#27450d; color:#a49c05;" value="'+num6+'">PRESS ME</button>');
+        }else if(100 <= lcount && lcount < 1000){
+            $('#content').append('<button class="btn-styled btnl" type="button" style="width:150px; height:50px; background:#27450d; color:#a49c05;" value="'+num6+'">PRESS ME</button>');
+        }else{
+            $('#content').append('<button class="btn-styled btnl" type="button" style="width:150px; height:50px; background:#27450d; color:#a49c05;" value="'+num6+'">PRESS ME</button>');
+        }
+
+
+    {% endfor %}
+
+    var arrNumber = new Array();
+    var arrNumber = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+
+    $(".btnl").on('click', function(e){
+
+        var a1 = $(this).attr('value');
+        var a2 = $(this).html();
+
+        if(a1 == a2){
+            alert("중복클릭");
+
+        }else{
+            $(this).html(a1);
+            $(this).css({'background-color':'yellow'});
+            $(this).css({'color':'black'});
+
+            var b1 = a1.split(",");
+
+            for (var i=0; i<b1.length; i++){
+                var c1 = b1[i];
+
+                for (var j=0; j<45; j++){
+                    if(c1 == j+1){
+                        arrNumber[j] = arrNumber[j]+1;
+                    }
+                }
+
+            }
+
+
+
+        }
+
+
+
+    });
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>뽑기로또</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+    <style>
+
+        body{
+            background-color: #fada5f;
+            background-image:url(/static/img/back1.png);
+        }
+
+        .hidden{position:absolute; left:-9999%; font-size:0; line-height:0; width:1px; height:1px; overflow:hidden;}
+
+        ul {
+            width: 100%;
+            margin: 0 auto;
+            padding: 0px;
+            list-style: none;
+            text-align: center;
+        }
+
+        ul li {
+            display: inline;
+
+        }
+
+        #box {
+
+        }
+
+
+        #content {
+
+        }
+
+
+
+
+        #modal.modal-overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        #modal .modal-window {
+            background: rgba( 255, 255, 0, 0.70 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 13.5px );
+            -webkit-backdrop-filter: blur( 13.5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            width: 400px;
+            height: 500px;
+            position: relative;
+            top: -100px;
+            padding: 10px;
+        }
+        #modal .title {
+            padding-left: 10px;
+            display: inline;
+            text-shadow: 1px 1px 2px gray;
+            color: black;
+
+        }
+        #modal .title h2 {
+            display: inline;
+        }
+        #modal .close-area {
+            display: inline;
+            float: right;
+            padding-right: 10px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+        }
+
+        #modal .content {
+            margin-top: 20px;
+            padding: 0px 10px;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+        }
+
+        .showBox{
+
+            position: fixed;
+            top:0;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            border: 0.4em inset #009688;
+            width: 30%;
+            height:100px;
+            background:white;
+            text-align: center;
+
+
+        }
+
+        .lrn {
+            font-size:20px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border: 2px solid rgb(56, 150, 128);
+
+        }
+
+        #showT2 {
+            margin-top: 5px;
+            visibility:hidden;
+
+
+        }
+
+        #showT3 {
+            margin-top: 15px;
+        }
+
+        .fext1 {
+            font-size:23px;
+        }
+
+        .fext2 {
+            font-size:10px;
+        }
+
+        h6{
+            margin:0;
+        }
+
+        #ti1{
+            text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #0fa, 0 0 80px #0fa, 0 0 90px #0fa, 0 0 100px #0fa, 0 0 150px #0fa;
+        }
+
+
+        MARQUEE {
+             text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #0fa, 0 0 80px #0fa, 0 0 90px #0fa, 0 0 100px #0fa, 0 0 150px #0fa;
+             font-size:77px;
+             /* 너비를 변경할 수 있는 display 설정 */
+             display: inline-block;
+             /* animation keyframes 설정 이름 */
+             animation-name: text-animation;
+             /* animation 총 구간 길이 시간 3초 */
+             animation-duration: 5s;
+             /* 딜레이 시간 (1초 뒤에 animation 실행) */
+             animation-delay: 1s;
+             /* animation 변화 패턴 */
+             animation-timing-function: linear;
+             /* animation이 끝났을 때 최종 형태 */
+             animation-fill-mode: both;
+             /* animation 반복 횟수 */
+             animation-iteration-count: infinite;
+             /* animation 방향*/
+             animation-direction: reverse;
+
+        }
+
+        @keyframes text-animation {
+            /* 0% 구간, 총 구간 10초라 가정했을 때 0초 구간*/
+            0%  {
+                /* 너비는 0% */
+                min-width: 0%;
+                /* 요소 바탕 색을 빨간색 */
+                color: red;
+                }      /* 50% 구간, 총 구간 10초라 가정했을 때 5초 구간*/
+            50% {
+                /* 너비는 50% */
+                min-width: 50%;
+                /* 요소 바탕 색을 파란색 */
+                color: blue;
+                /* 글자 색은 흰색 */
+
+                 }
+             /* 100% 구간, 총 구간 10초라 가정했을 때 10초 구간*/
+            100% {
+                /* 너비는 100% */
+                min-width: 100%;
+                /* 요소 바탕 색을 파란색 */
+                color: green;
+                /* 글자 색은 흰색 */
+
+                }
+        }
+
+
+
+
+
+    </style>
+
+
+
+</head>
+
+<body>
+
+<div style="position:absolute; height:290px; width:100%; z-index:-10;">
+
+    <div style="margin-top:130px;">
+        <MARQUEE scrollamount="15"><span>{{contents}}</span></MARQUEE>
+    </div>
+
+</div>
+
+<div class="container-fluid" style="background-image:url(/static/img/fb7.png); height:50px; position: fixed;">
+    <button type="button" class="btn" style="background-image:url(/static/img/clipm2.png); background-size:cover; height:80px; margin-left:10%;" onClick="location.href='/l_list'" title="번호 기록실"><br/>번호<br/>기록실</button>
+    <button type="button" class="btn" style="background-image:url(/static/img/clipm2.png); background-size:cover; height:80px;" onClick="location.href='/lotto_main'" title="번호 재생성"><br/>번호<br/>재생성</button>
+
+</div>
+<div class="container-fluid" style="background-image:url(/static/img/fb8.png); height:50px; position: fixed; bottom:0;"></div>
+<div class="container">
+    <div></div>
+    <div class="showBox">
+        <div id="showT2">
+            <div>
+                <ul>
+                    <li id="showL1_R" class="lrn"></li>
+                    <li id="showL2_R" class="lrn"></li>
+                    <li id="showL3_R" class="lrn"></li>
+                    <li id="showL4_R" class="lrn"></li>
+                    <li id="showL5_R" class="lrn"></li>
+                    <li id="showL6_R" class="lrn"></li>
+                </ul>
+
+            </div>
+
+        </div>
+        <div  id="showT3">
+            <ul>
+                <li id="showL1" class="fext1"></li><li id="showL1_s" class="fext2"></li>
+                <li id="showL2" class="fext1"></li><li id="showL2_s" class="fext2"></li>
+                <li id="showL3" class="fext1"></li><li id="showL3_s" class="fext2"></li>
+                <li id="showL4" class="fext1"></li><li id="showL4_s" class="fext2"></li>
+                <li id="showL5" class="fext1"></li><li id="showL5_s" class="fext2"></li>
+                <li id="showL6" class="fext1"></li><li id="showL6_s" class="fext2"></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1 class="hidden">로또 뽑기</h1>
+
+    <div style="text-align:center; height:290px;">
+
+
+
+    </div>
+
+
+
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="title" >
+                <h2>기록</h2>
+            </div>
+            <div class="close-area">X</div>
+            <div>
+                <form method="POST" action="/l_save">
+                    {% csrf_token %}
+                    <div style="margin-top:10%; text-align:center; color:black; font-size:20px; text-shadow: 1px 1px 2px gray;">
+                        <label for="postname">이니셜</label>
+                    </div>
+                    <div>
+                        <input type="text" name="postname" id="postname" style="width:100%;" placeholder="이니셜">
+                    </div>
+                    <div style="margin-top:5%; text-align:center;  color:black; font-size:20px; text-shadow: 1px 1px 2px gray;">
+                        <label for="contents">소원</label>
+                    </div>
+                    <div>
+                        <textarea rows="5" name="contents" id="contents" style="width:100%; resize: none;" placeholder="소원을 입력하세요"></textarea><br>
+
+                    </div>
+
+                    <div>
+                        <label for="color_k">색 선택</label>
+                        <select name="color_k" id="color_k">
+                            <option value="none" >====선택====</option>
+                            <option value="lucky1.png" style="color:#e30000">빨강</option>
+                            <option value="lucky2.png" style="color:#2a7d00">초록</option>
+                            <option value="lucky3.png" style="color:#4d7f97">파랑</option>
+                            <option value="lucky4.png" style="color:#fec93f">노랑</option>
+                            <option value="lucky5.png" style="color:#ed4176">보라</option>
+                        </select>
+
+                    </div>
+
+                    <input type="hidden" name="pk" id="pk" value="{{pkconfirm}}">
+
+
+
+                    <div style="margin-top:10%; text-align:end;">
+                        <input type="submit" value="기록">
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div id="box" onscroll="gotthing()">
+        <div id="content" style="text-align:center;"></div>
+    </div>
+
+    <p id="demo"></p>
+
+    <div style="margin-bottom:7%;"></div>
+
+
+    <script>
+        function gotthing() {
+          var box = document.getElementById("box");
+          var x = box.scrollLeft;
+          var y = box.scrollTop;
+          var n = "수평: " + x + "px<br>수직: " + y + "px";
+          document.getElementById ("demo").innerHTML = n;
+        }
+    </script>
+
+    <script>
+        const modal = document.getElementById("modal")
+        function modalOn() {
+            modal.style.display = "flex"
+        }
+        function isModalOn() {
+            return modal.style.display === "flex"
+        }
+        function modalOff() {
+            modal.style.display = "none"
+        }
+
+        const btnModal = document.getElementById("btn-modal")
+        btnModal.addEventListener("click", e => {
+            modalOn();
+
+        })
+
+        const closeBtn = modal.querySelector(".close-area")
+        closeBtn.addEventListener("click", e => {
+            modalOff();
+        })
+
+        modal.addEventListener("click", e => {
+            const evTarget = e.target
+            if(evTarget.classList.contains("modal-overlay")) {
+                modalOff();
+            }
+        })
+
+    </script>
+
+
+
+</div>
+
+<script>
+
+
+    function color_s(x, y, z){
+            if(x == 0){
+                $("#showL1_R").html(y);
+                if (z >= 40){
+                    $("#showL1_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL1_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL1_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL1_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL1_R").css({'background-color':'orange'});
+                }
+            }else if(x == 1){
+                $("#showL2_R").html(y);
+                if (z >= 40){
+                    $("#showL2_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL2_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL2_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL2_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL2_R").css({'background-color':'orange'});
+                }
+            }else if(x == 2){
+                $("#showL3_R").html(y);
+                if (z >= 40){
+                    $("#showL3_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL3_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL3_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL3_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL3_R").css({'background-color':'orange'});
+                }
+            }else if(x == 3){
+                $("#showL4_R").html(y);
+                if (z >= 40){
+                    $("#showL4_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL4_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL4_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL4_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL4_R").css({'background-color':'orange'});
+                }
+            }else if(x == 4){
+                $("#showL5_R").html(y);
+                if (z >= 40){
+                    $("#showL5_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL5_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL5_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL5_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL5_R").css({'background-color':'orange'});
+                }
+            }else if(x == 5){
+                $("#showL6_R").html(y);
+                if (z >= 40){
+                    $("#showL6_R").css({'background-color':'green'});
+                }else if(z >= 30){
+                    $("#showL6_R").css({'background-color':'gray'});
+                }else if(z >= 20){
+                    $("#showL6_R").css({'background-color':'red'});
+                }else if(z >= 10){
+                    $("#showL6_R").css({'background-color':'blue'});
+                }else {
+                    $("#showL6_R").css({'background-color':'orange'});
+                }
+            }
+
+    }
+
+    var arrNumber = new Array();
+    var arrNumber = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+
+    {% for lottos in lotto %}
+
+
+        var num6 = {{lottos.name}};
+        var lcount = {{lottos.id}};
+
+        if( lcount < 10){
+            $('#content').append('<button class="btn-styled btnl" title="로또번호" type="button" style="font-size:14px; width:120px; height:120px; background:#27450d; color:white;" value="'+num6+'"><p class="scap">'+num6+'</p></button>');
+        }else if(10 <= lcount && lcount < 100){
+            $('#content').append('<button class="btn-styled btnl" title="로또번호" type="button" style="font-size:14px; width:120px; height:120px; background:#27450d; color:white;" value="'+num6+'"><p class="scap">'+num6+'</p></button>');
+        }else if(100 <= lcount && lcount < 1000){
+            $('#content').append('<button class="btn-styled btnl" title="로또번호" type="button" style="font-size:14px; width:120px; height:120px; background:#27450d; color:white;" value="'+num6+'"><p class="scap">'+num6+'</p></button>');
+        }else{
+            $('#content').append('<button class="btn-styled btnl" title="로또번호" type="button" style="font-size:14px; width:120px; height:120px; background:#27450d; color:white;" value="'+num6+'"><p class="scap">'+num6+'</p></button>');
+        }
+
+        var b11 = num6;
+
+            for (var i=0; i<b11.length; i++){
+                var c11 = b11[i];
+
+                for (var j=0; j<45; j++){
+                    if(c11 == j+1){
+                        arrNumber[j] = arrNumber[j]+1;
+                    }
+                }
+
+            }
+
+
+
+    {% endfor %}
+
+
+    var arrR = new Array();
+    arrR = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var basicn = 0;
+    var basicn2 = 0;
+
+
+    for(var i2=0; i2<arrR.length; i2++){
+    arrR[i2] = arrNumber[i2]
+    }
+
+    arrR.sort((a,b)=>b-a);
+
+    for(var j3=0; j3<6; j3++){
+
+        if(arrR[j3] == 0){
+
+        }else{
+
+            if(basicn == arrR[j3]){
+
+            }else{
+                for(var i3=0; i3<arrNumber.length; i3++){
+
+                    if(basicn2 >5){
+
+                    }else{
+                        if(arrNumber[i3] == arrR[j3]){
+
+
+                            if(basicn2 == 0){
+                                 $("#showL1").html(i3+1);
+                                 $("#showL1_s").html("-"+arrR[j3]+"회");
+                            }
+                            if(basicn2 == 1){
+                                 $("#showL2").html(i3+1);
+                                 $("#showL2_s").html("-"+arrR[j3]+"회");
+                            }
+                            if(basicn2 == 2){
+                                 $("#showL3").html(i3+1);
+                                 $("#showL3_s").html("-"+arrR[j3]+"회");
+                            }
+                            if(basicn2 == 3){
+                                 $("#showL4").html(i3+1);
+                                 $("#showL4_s").html("-"+arrR[j3]+"회");
+                            }
+                            if(basicn2 == 4){
+                                 $("#showL5").html(i3+1);
+                                 $("#showL5_s").html("-"+arrR[j3]+"회");
+                            }
+                            if(basicn2 == 5){
+                                 $("#showL6").html(i3+1);
+                                 $("#showL6_s").html("-"+arrR[j3]+"회");
+                            }
+
+                            basicn2++;
+
+                        }
+                    }
+
+                }
+            }
+            basicn = arrR[j3];
+
+        }
+
+    }
+
+
+
+    $(".btnl").css({'background-image':'url(/static/img/pressme3.png)'});
+    $(".btnl").css({'background-size':'cover'});
+    $(".btnl").css({'color':'yellow'});
+    $(".scap").css({'margin-bottom':'0px'});
+
+
+
+    $(".btnl").on('click', function(e){
+
+        $("#showT2").css({'visibility':'visible'});
+
+        var a1 = $(this).attr('value');
+        var a2 = $(this).html();
+
+
+
+        if(a1 == a2){
+            var b1 = a1.split(",");
+            for (var i=0; i<b1.length; i++){
+                var c1 = b1[i];
+                var c2 = tt = Number(c1);
+                if (c2 < 10){
+                    c1 = "&nbsp;&nbsp;"+c1+"&nbsp;&nbsp;";
+                }else {
+                    c1 = "&nbsp;"+c1+"&nbsp;";
+                }
+
+                color_s(i, c1, c2);
+
+
+            }
+
+
+        }else{
+            $(this).html(a1);
+            var b1 = a1.split(",");
+
+            for (var i=0; i<b1.length; i++){
+                var c1 = b1[i];
+
+                var c2 = tt = Number(c1);
+                if (c2 < 10){
+                    c1 = "&nbsp;&nbsp;"+c1+"&nbsp;&nbsp;";
+                }else {
+                    c1 = "&nbsp;"+c1+"&nbsp;";
+                }
+
+                color_s(i, c1, c2);
+            }
+        }
+
+    });
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

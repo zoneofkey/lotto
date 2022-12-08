@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>Posting!</title>
+    </head>
+    <body>
+        <h1>게시글 개별 페이지입니다</h1>
+        <p>{{post.postname}}</p>
+        <p>{{post.contents}}</p>
+        <a href="/main_l/{{post.pk}}/remove">삭제</a>
+        {% if post.mainphoto %}
+            <img src = "{{ post.mainphoto.url }}" alt="" height="600">
+            <br>
+        {% endif %}
+        <a href="/main_l">목록</a>
+    </body>
+</html>
